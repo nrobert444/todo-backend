@@ -76,9 +76,9 @@ app.put('/api/todos/:id', async (req, res) => {
         const result = await client.query(`
         update todos
         set complete=$1
-        where id =$2
+        where id =${req.params.id}
         returning *;
-        `, [req.body.complete, req.params.id]);
+        `, [req.body.complete]);
 
         res.json(result.rows[0]);
     }
