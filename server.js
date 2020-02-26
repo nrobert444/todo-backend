@@ -52,17 +52,12 @@ app.post('/api/todos', async (req, res) => {
         // use req.body.task to build a sql query to add a new todo
         // we also return the new todo
 
-        const query = `
-        insert into todos (task, complete)
-        values ('${req.body.task}', false)
-        returning *;
-    `;
         const result = await client.query(`
             insert into todos (task, complete)
-            values ('${req.body.task}', false)
+            values ($1, false)
             returning *;
         `,
-        [/* pass in data */]);
+        [req.body.task]);
 
         // respond to the client request with the newly created todo
         res.json(result.rows[0]);
@@ -80,10 +75,10 @@ app.put('/api/todos/:id', async (req, res) => {
     try {
         const result = await client.query(`
         update todos
-        set complete=${req.body.complete}
-        where id = ${req.params.id}
+        set complete=$1
+        where id =$2
         returning *;
-        `, [/* pass in data */]);
+        `, [req.body.complete, req.params.id]);
 
         res.json(result.rows[0]);
     }
