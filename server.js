@@ -43,6 +43,7 @@ app.use('/api/auth', authRoutes);
 
 // API Routes
 const ensureAuth = require('./lib/auth/ensure-auth');
+
 app.use('/api', ensureAuth);
 
 // *** TODOS ***
@@ -79,10 +80,10 @@ app.post('/api/todos', async(req, res) => {
 
         const result = await client.query(`
             insert into todos (task, complete, user_id)
-            values ($1, $2, $3)
+            values ($1, false, $3)
             returning *;
         `,
-        [req.body.task, false, req.userId]);
+        [req.body.task, req.userId]);
 
         // respond to the client request with the newly created todo
         res.json(result.rows[0]);
