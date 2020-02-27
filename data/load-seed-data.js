@@ -9,6 +9,12 @@ async function run() {
     try {
         await client.connect();
 
+        await client.query(`
+                    INSERT INTO users (email, hash)
+                    VALUES ($1, $2);
+                `,
+        ['cool@cool.com', 'asdfasdfasdf']);
+
         await Promise.all(
             todos.map(todo => {
                 return client.query(`
