@@ -43,7 +43,7 @@ app.use('/api/auth', authRoutes);
 
 // API Routes
 const ensureAuth = require('./lib/auth/ensure-auth');
-app.use('/api/', ensureAuth);
+app.use('/api', ensureAuth);
 
 // *** TODOS ***
 // this is /GET request that returns whole list of todos
